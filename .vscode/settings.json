@@ -1,10 +1,20 @@
 {
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.python"
-  },
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[mdx]": {
+    "editor.formatOnSave": false
+  },
+  "[md]": {
+    "editor.formatOnSave": false
+  },
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
+  "files.associations": {
+    "*.mdx": "markdown"
+  },
 }
