@@ -1,12 +1,15 @@
 import { UserAuthForm } from '@/components/auth-form'
+import { getCurrentUser } from '@/lib/session'
+import { redirect } from 'next/navigation'
 
-export default function Page() {
+export default async function Page() {
+  const user = await getCurrentUser()
+
+  if (user) {
+    redirect('/')
+  }
   return (
     <div className="mx-auto mt-32 flex max-w-sm flex-col space-y-2">
-      {process.env.GOOGLE_CLIENT_ID}
-      <br />
-      {process.env.GOOGLE_CLIENT_SECRET}
-      <br />
       <UserAuthForm />
     </div>
   )
