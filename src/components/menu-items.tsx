@@ -6,9 +6,9 @@ export type MenuItemType = {
 
 export const items: MenuItemType[] = [
   {
-    title: 'Page',
-    description: 'Page description',
-    href: '/page',
+    title: 'Blog',
+    description: 'We write about things',
+    href: '/blog',
   },
   {
     title: 'Section',

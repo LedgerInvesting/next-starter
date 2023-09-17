@@ -8,6 +8,7 @@ import { signOut } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { UserIcon } from 'lucide-react'
 import { type User } from 'next-auth'
+import { items } from '@/components/menu-items'
 
 export function Header({ user }: { user: Omit<User, 'id'> }) {
   return (
@@ -24,14 +25,16 @@ export function Header({ user }: { user: Omit<User, 'id'> }) {
               priority
             />
           </Link>
+          {items.map((i) => (
+            <Link href={i.href} key={i.href}>
+              <Button variant="link">{i.title}</Button>
+            </Link>
+          ))}
           <div className="flex-grow" />
           {!user ? (
             <>
               <Link href="/signin">
                 <Button variant="link">Sign in</Button>
-              </Link>
-              <Link href="/signup">
-                <Button variant="link">Sign up</Button>
               </Link>
             </>
           ) : (
