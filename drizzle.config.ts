@@ -1,4 +1,4 @@
-import { DB_URL } from '@/database'
+import DB_URL from '@/database/url'
 import type { Config } from 'drizzle-kit'
 
 export default {

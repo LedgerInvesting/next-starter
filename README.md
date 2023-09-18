@@ -1,15 +1,19 @@
 # Next.js starter
 
-This project uses Next.js 13 app directory structure with TypeScript. The data layer uses Drizzle ORM to interface with PostgreSQL/MySQL. Emails are sent via Resend and written using react-email. UI components utilize Radix UI and Tailwind CSS.
+### 🔗 View demo: [starter.ldgr.app](https://starter.ldgr.app/)
+
+This project uses **Next.js 13** app directory structure with **TypeScript**. The data layer uses **Drizzle ORM** to interface with **PostgreSQL/MySQL**. Emails are sent via **Resend** and written using **react-email**. UI components utilize **Radix UI** and **Tailwind CSS**.
 
 ## Stack
 
-*   **Framework**: Next.js 13 (App Directory)
-*   **Database**: PostgreSQL/MySQL, Drizzle ORM
-*   **Email**: Resend + react-email
-*   **UI**: Radix UI + Tailwind CSS
-*   **Styling**: Tailwind CSS
-*   **Deployment**: Vercel
+*   **Framework**: [Next.js](https://nextjs.org/docs) 13 (App Directory)
+*   **Database**: PostgreSQL/MySQL, [Drizzle ORM](https://orm.drizzle.team/docs/overview)
+*   **Email**: [Resend](https://resend.com/) + [react-email](https://react.email/)
+*   **UI**: [Radix UI]() + [Shadcn UI](https://ui.shadcn.com/)
+    * [Lucide Icons](https://lucide.dev/)
+    * [Heroicons](https://heroicons.com/)
+*   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+*   **Deployment**: [Vercel](https://vercel.com/)
 
 ## Features
 
@@ -19,6 +23,7 @@ This project uses Next.js 13 app directory structure with TypeScript. The data l
 *   PostgreSQL and MySQL support
 *   Email sending with Resend
 *   Email templates written in React with react-email
+    *   Open `localhost:3000/emails` to preview email templates and send test emails
 *   Radix UI components
 *   Tailwind CSS styling
 *   Optimized with bun builds
@@ -43,8 +48,27 @@ This project uses Next.js 13 app directory structure with TypeScript. The data l
 *   `styles`: Global styles
 *   `utils`: Shared utility functions
 
+## Database client
+
+Run `bun run db:studio` and open `http://0.0.0.0:4983/` to view the database in the browser.
+
 ## Deployment
 
 The app can be easily deployed on Vercel or any Node.js platform.
 
 Let me know if you would like me to modify or expand this README further.
+
+### Apply migrations to database
+
+```bash
+# Drizzle Kit
+# Vercel Postgres requires SSL "?sslmode=require"
+npx drizzle-kit push:pg --connectionString="postgres://<user>:<password>@<host>/<dbname>?sslmode=require" --schema=src/database/schema.ts --driver=pg
+```
+
+## Inspiration
+
+* [Shadcn Taxonomy](https://github.com/shadcn-ui/taxonomy)
+* [Create T3 App](https://github.com/t3-oss/create-t3-app)
+* [Tailwind UI](https://tailwindui.com/)
+* [Vercel Platform Starter](https://github.com/vercel/platforms)
