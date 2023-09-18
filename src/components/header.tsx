@@ -10,20 +10,13 @@ import { UserIcon } from 'lucide-react'
 import { type User } from 'next-auth'
 import { items } from '@/components/menu-items'
 
-export function Header({ user }: { user: Omit<User, 'id'> }) {
+export function Header({ user }: { user: User }) {
   return (
     <header>
       <Container>
         <nav className="flex w-full items-center space-x-4 py-2">
           <Link href="/">
-            <Image
-              src="/logo.svg"
-              alt="logo"
-              className="dark:invert"
-              width={24}
-              height={24}
-              priority
-            />
+            <Image src="/logo.svg" alt="logo" className="dark:invert" width={24} height={24} priority />
           </Link>
           {items.map((i) => (
             <Link href={i.href} key={i.href}>
