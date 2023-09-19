@@ -63,7 +63,7 @@ Let me know if you would like me to modify or expand this README further.
 ```bash
 # Drizzle Kit
 # Vercel Postgres requires SSL "?sslmode=require"
-npx drizzle-kit push:pg --connectionString="postgres://<user>:<password>@<host>/<dbname>?sslmode=require" --schema=src/database/schema.ts --driver=pg
+export DATABASE_URL="postgres://<user>:<password>@<host>/<dbname>?sslmode=require" && npx drizzle-kit push:pg --config=drizzle.config.ts
 ```
 
 ## Inspiration
