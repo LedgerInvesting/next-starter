@@ -5,10 +5,8 @@
 .drizzle
 .vercel
 
-postgres/*
-!postgres/init-db.sh
-!postgres/README.md
-push-db-migrations.sh
+postgres/db/
+postgres/*.log
 
 # dependencies
 /node_modules

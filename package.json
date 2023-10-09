@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:pg",
+    "db:migration:drop": "drizzle-kit drop",
     "db:push": "drizzle-kit push:pg",
     "db:start-local": "pg_ctl -D ./postgres/db start",
     "db:studio": "drizzle-kit studio"
