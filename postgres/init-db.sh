@@ -1,7 +1,7 @@
 #!/bin/bash
 
 initdb -D $PWD/db
-pg_ctl -D $PWD/db -l $PWD/logfile start
+pg_ctl -D $PWD/db -l $PWD/postgres.log start
 createuser -s postgres
 createdb localdb
 psql -U postgres -d localdb <<EOF
