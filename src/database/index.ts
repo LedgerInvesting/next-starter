@@ -12,7 +12,9 @@ import { Client } from 'pg'
 const client = new Client({
   connectionString: DB_URL,
 })
-await client.connect()
+if (process.env.NODE_ENV !== 'production' && process.env.npm_lifecycle_event !== 'build') {
+  await client.connect()
+}
 
 // const client = postgres(DB_URL)
 // class MyLogger implements Logger {
