@@ -46,6 +46,7 @@
     "node_modules",
     ".next",
     "postgres",
+    "drizzle"
   ],
   "strict": true,
   "forceConsistentCasingInFileNames": true
