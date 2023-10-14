@@ -2,7 +2,6 @@ import { id, timestampsColumns } from '@/database/utils'
 import { users } from '@/database/schema/auth'
 import { relations, sql } from 'drizzle-orm'
 import { json, pgTable, text } from 'drizzle-orm/pg-core'
-import { z } from 'zod'
 
 // const contentSchema = z
 //   .object({
