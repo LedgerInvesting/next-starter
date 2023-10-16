@@ -55,17 +55,10 @@ export const metadata: Metadata = {
   manifest: `${siteConfig.url}/site.webmanifest`,
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser()
   return (
-    <html
-      lang="en"
-      className={clsx('scroll-smooth bg-white antialiased', inter.variable)}
-    >
+    <html lang="en" className={clsx('scroll-smooth bg-white antialiased', inter.variable)}>
       <body className="flex min-h-screen w-full flex-col justify-between">
         <Header user={user} />
         <main className="flex-grow bg-slate-100">{children}</main>

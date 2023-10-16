@@ -12,7 +12,7 @@ import { items } from '@/components/menu-items'
 
 export function Header({ user }: { user: User }) {
   return (
-    <header>
+    <header className="z-50 border-b border-gray-200 bg-white">
       <Container>
         <nav className="flex w-full items-center space-x-4 py-2">
           <Link href="/">

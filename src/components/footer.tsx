@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export function Footer() {
   return (
-    <footer>
+    <footer className="z-50 border-t border-gray-200 bg-white">
       <Container>
         <nav className="flex w-full items-center space-x-4 py-2">
           <Link href="#">
