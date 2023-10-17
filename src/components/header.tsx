@@ -12,9 +12,9 @@ import { items } from '@/components/menu-items'
 
 export function Header({ user }: { user: User }) {
   return (
-    <header className="z-50 border-b border-gray-200 bg-white">
+    <header className="z-50 flex h-16 items-center border-b border-gray-200 bg-white">
       <Container>
-        <nav className="flex w-full items-center space-x-4 py-2">
+        <nav className="flex w-full items-center space-x-4">
           <Link href="/">
             <Image src="/logo.svg" alt="logo" className="dark:invert" width={24} height={24} priority />
           </Link>
