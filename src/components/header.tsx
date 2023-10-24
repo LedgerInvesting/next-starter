@@ -9,8 +9,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { UserIcon } from 'lucide-react'
 import { type User } from 'next-auth'
 import { items } from '@/components/menu-items'
+import { useAuth } from '@/components/providers/auth'
 
-export function Header({ user }: { user: User }) {
+export function Header({ user: user2 }: { user: User }) {
+  const { user } = useAuth()
   return (
     <header className="z-50 flex h-16 items-center border-b border-gray-200 bg-white">
       <Container>

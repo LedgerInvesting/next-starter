@@ -67,7 +67,7 @@ export async function OpenAIChat(messages: ChatCompletionMessageParam[], model: 
   const response = await openai.chat.completions.create({
     model: model,
     stream: true,
-    messages: messages,
+    messages: truncatedMessages,
     // max_tokens: 8192,
     temperature: 0.5,
     // top_p: 1,
@@ -99,6 +99,7 @@ export async function OpenAIChat(messages: ChatCompletionMessageParam[], model: 
   // TODO: https://sdk.vercel.ai/docs/guides/providers/openai#guide-save-to-database-after-completion
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response)
+
   // Respond with the stream
   return new StreamingTextResponse(stream)
 }

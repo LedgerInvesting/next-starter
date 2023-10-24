@@ -1,11 +1,9 @@
+import { Providers } from '@/app/providers'
 import { Analytics } from '@/components/analytics'
-import { Footer } from '@/components/footer'
-import { Header } from '@/components/header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
-import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { siteConfig } from '@/config/site'
-import { getCurrentSession, getCurrentUser } from '@/lib/session'
+import { getCurrentUser } from '@/lib/session'
 import '@/styles/globals.css'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
@@ -64,12 +62,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={clsx('scroll-smooth bg-white antialiased', inter.variable)}>
       <body className="flex min-h-screen w-full flex-col justify-between">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Providers>
           {children}
           <Analytics />
           <Toaster />
           <TailwindIndicator />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )

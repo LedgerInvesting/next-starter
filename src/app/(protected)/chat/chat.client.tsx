@@ -1,5 +1,6 @@
 'use client'
 
+import { ChatMessages } from '@/app/(protected)/chat/content'
 import { Button } from '@/components/ui/button'
 import { type Message, useChat } from 'ai/react'
 import { ChevronRight } from 'lucide-react'
@@ -7,12 +8,21 @@ import { useRef, useState } from 'react'
 
 export const PROMPT_INSTRUCTIONS = ``
 
-export default function Chat() {
+export default function Chat({ chat }: { chat?: ChatMessages }) {
+  const initialMessages = chat?.messages
+    ? chat.messages.map((m) => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        function_call: m.function_call,
+      }))
+    : []
   const [rows, setRows] = useState(1)
   const { messages, input, error, handleInputChange, handleSubmit, stop, reload, setMessages, isLoading, append } =
     useChat({
       api: '/api/chat',
       initialMessages: [
+        ...initialMessages,
         // {
         //   id: '1',
         //   role: 'system',

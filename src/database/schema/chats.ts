@@ -2,13 +2,7 @@ import { id, timestampsColumns } from '@/database/utils'
 import { users } from '@/database/schema/auth'
 import { relations, sql } from 'drizzle-orm'
 import { json, pgTable, text } from 'drizzle-orm/pg-core'
-
-// const contentSchema = z
-//   .object({
-//     myString: z.string().min(5),
-//     myUnion: z.union([z.number(), z.boolean()]),
-//   })
-//   .describe('My neat object schema')
+import { messages } from '@/database/schema/messages'
 
 // https://github.com/supabase/pg_jsonschema
 export const chats = pgTable(
@@ -16,18 +10,18 @@ export const chats = pgTable(
   {
     id: id('chat'),
     title: text('title'),
-    content: json('content'),
     user: text('user').references(() => users.id, { onDelete: 'cascade' }),
     ...timestampsColumns,
   },
   (table) => ({}),
 )
 
-export const chatRelations = relations(chats, ({ one }) => ({
+export const chatRelations = relations(chats, ({ one, many }) => ({
   user: one(users, {
     fields: [chats.user],
     references: [users.id],
   }),
+  messages: many(messages),
 }))
 export type InsertChat = typeof chats.$inferInsert
 export type SelectChat = typeof chats.$inferSelect

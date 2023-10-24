@@ -1,4 +1,4 @@
-import { isProduction } from '@/lib/utils'
+import { isProduction } from '@/lib/env'
 
 let DB_URL = process.env.DATABASE_URL
 if (DB_URL && !DB_URL.includes('sslmode=require') && isProduction) {
