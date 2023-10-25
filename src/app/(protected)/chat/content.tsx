@@ -1,12 +1,11 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
-import Chat from './chat.client'
+import Chat from './chat'
 import { Container } from '@/components/container'
 import clsx from 'clsx'
 import db from '@/database'
 import { chats } from '@/database/schema/chats'
 import { eq } from 'drizzle-orm'
 import { redirect, notFound } from 'next/navigation'
-import { enforceAuth } from '@/lib/enforce-auth'
 import { User } from 'next-auth'
 import ChatSidebar from '@/app/(protected)/chat/sidebar'
 
@@ -39,16 +38,16 @@ export default async function Content({ user, id }: { user: User; id?: string })
     <Container className="flex flex-grow items-stretch">
       <div
         className={clsx(
-          `bg-stripes-green-200 hidden w-44 flex-col lg:flex`,
+          `hidden w-44 flex-col bg-stripes-green-200 lg:flex`,
           `max-h-[calc(100vh-8rem)]`, // screen - header + footer height
         )}
       >
         <h1 className="text-xl font-bold">Past chats</h1>
-        <ScrollArea className="bg-stripes-indigo-400 flex flex-grow">
+        <ScrollArea className="flex flex-grow bg-stripes-indigo-400">
           <ChatSidebar user={user} />
         </ScrollArea>
       </div>
-      <div className="bg-stripes-cyan-500 w-full">
+      <div className="w-full bg-stripes-cyan-500">
         <Chat chat={chat} />
       </div>
     </Container>

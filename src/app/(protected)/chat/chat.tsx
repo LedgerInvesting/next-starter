@@ -33,7 +33,7 @@ export default function Chat({ chat }: { chat?: ChatMessages }) {
         console.error('onError', err)
       },
       onResponse: (res) => {
-        console.log('onResponse > res.json()', res)
+        console.log('onResponse > await res.json()', res)
       },
       onFinish: (msg) => {
         console.log('onFinish > msg', msg)

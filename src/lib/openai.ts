@@ -5,6 +5,7 @@ import {
   type ChatCompletionMessageParam,
   type ChatCompletionCreateParamsBase,
 } from 'openai/resources/chat/completions.mjs'
+import { PassThrough } from 'stream'
 
 // Create an OpenAI API client (that's edge friendly!)
 export const openai = new OpenAI({
@@ -98,8 +99,38 @@ export async function OpenAIChat(messages: ChatCompletionMessageParam[], model: 
   })
   // TODO: https://sdk.vercel.ai/docs/guides/providers/openai#guide-save-to-database-after-completion
   // Convert the response into a friendly text-stream
-  const stream = OpenAIStream(response)
+  const openAIStream = OpenAIStream(response)
 
-  // Respond with the stream
-  return new StreamingTextResponse(stream)
+  // Create TransformStream
+  const transformStream = new TransformStream()
+
+  // Create two output readable streams
+  const [clientStream, dbStream] = transformStream.readable.tee()
+
+  // Pipe to client
+  const streamResponse = new StreamingTextResponse(clientStream)
+
+  // Pipe to database
+  // TODO: optimize caching stream chunks to Redis before writing to Postgres in one transaction
+  const dbReader = dbStream.getReader()
+  const readStreamToDB = async () => {
+    const { value, done } = await dbReader.read()
+    if (done) return
+    await saveToDB(value)
+    readStreamToDB()
+  }
+
+  readStreamToDB()
+
+  // Pipe original stream to TransformStream
+  openAIStream.pipeTo(transformStream.writable)
+
+  return streamResponse
+}
+
+const textDecoder = new TextDecoder('utf-8')
+async function saveToDB(chunk) {
+  // TODO: database save logic here
+  const text = textDecoder.decode(chunk)
+  console.log(text)
 }

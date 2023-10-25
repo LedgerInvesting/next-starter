@@ -8,10 +8,7 @@ export const runtime = 'edge' // 'nodejs' is the default
 // Create a new chat
 export async function POST(req: Request) {
   const { messages }: { messages: ChatCompletionMessageParam[] } = await req.json()
-  const stream = await OpenAIChat(messages)
-  console.log('stream')
-  console.log(stream)
-  return stream
+  return await OpenAIChat(messages)
 }
 
 // Retrieve multiple chats

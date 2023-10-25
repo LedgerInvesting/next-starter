@@ -8,6 +8,7 @@ export async function enforceAuth() {
     const { headers } = await import('next/headers')
     const headersList = headers()
     const referer = headersList.get('referer')
+    if (!referer) return
     const url = new URL(referer)
     const pathWithSearchParams = url.pathname + url.search
     from = `?from=${encodeURIComponent(pathWithSearchParams)}`

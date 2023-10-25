@@ -1,5 +1,5 @@
-import { Providers } from '@/app/providers'
 import { Analytics } from '@/components/analytics'
+import { ThemeProvider } from '@/components/providers/theme'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/toaster'
 import { siteConfig } from '@/config/site'
@@ -62,12 +62,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={clsx('scroll-smooth bg-white antialiased', inter.variable)}>
       <body className="flex min-h-screen w-full flex-col justify-between">
-        <Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Analytics />
           <Toaster />
           <TailwindIndicator />
-        </Providers>
+        </ThemeProvider>
       </body>
     </html>
   )
