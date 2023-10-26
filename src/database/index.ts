@@ -7,7 +7,6 @@ import * as schema from './load-schema'
 const client = new Pool({
   connectionString: DB_URL,
 })
-// if (isProduction && !isRunningBuild) {
 if (process.env.NODE_ENV === 'production' && process.env.npm_lifecycle_event !== 'build') {
   await client.connect()
 }

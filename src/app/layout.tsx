@@ -62,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={clsx('scroll-smooth bg-white antialiased', inter.variable)}>
       <body className="flex min-h-screen w-full flex-col justify-between">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="ligth" enableSystem>
           {children}
           <Analytics />
           <Toaster />

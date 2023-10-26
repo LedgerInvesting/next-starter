@@ -4,13 +4,14 @@ import { relations } from 'drizzle-orm'
 import { integer, json, pgEnum, pgTable, text } from 'drizzle-orm/pg-core'
 import { chats } from '@/database/schema/chats'
 import { Message } from 'ai/react'
+import { type ChatCompletionMessageParam } from 'openai/resources/chat/completions.mjs'
 
 export const messageRoles = ['user', 'assistant', 'system', 'function'] as const
 export type MessageRoles = (typeof messageRoles)[number]
 type LibMessageRoles = Message['role']
 type AreEqual<T, U> = T extends U ? (U extends T ? true : false) : false
 export type CheckEquality = AreEqual<MessageRoles, LibMessageRoles>
-const messageRolesEnum = pgEnum('message_roles', messageRoles)
+export const messageRolesEnum = pgEnum('message_roles', messageRoles)
 
 export const messages = pgTable(
   'messages',
@@ -18,7 +19,7 @@ export const messages = pgTable(
     id: id('chat'),
     role: messageRolesEnum('role'),
     content: text('content'),
-    function_call: json('function_call'),
+    function_call: json('function_call').$type<ChatCompletionMessageParam.FunctionCall>(),
     token_count: integer('token_count'),
     user: text('user').references(() => users.id, { onDelete: 'cascade' }),
     chat: text('chat').references(() => chats.id, { onDelete: 'cascade' }),

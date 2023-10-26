@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import db from '@/database'
 import { chats } from '@/database/schema/chats'
 import { eq } from 'drizzle-orm'
-import { redirect, notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { User } from 'next-auth'
 import ChatSidebar from '@/app/(protected)/chat/sidebar'
 
@@ -29,7 +29,6 @@ export default async function Content({ user, id }: { user: User; id?: string })
   if (id) {
     chat = await getChatMessages(id)
     if (!chat) {
-      // notFound()
       redirect('/chat')
     }
   }

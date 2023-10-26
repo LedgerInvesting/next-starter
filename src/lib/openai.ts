@@ -1,11 +1,11 @@
 import OpenAI from 'openai'
 import { getEncoding } from 'js-tiktoken'
-import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { OpenAIStream, OpenAIStreamCallbacks, StreamingTextResponse } from 'ai'
 import {
   type ChatCompletionMessageParam,
   type ChatCompletionCreateParamsBase,
 } from 'openai/resources/chat/completions.mjs'
-import { PassThrough } from 'stream'
+// import { SelectMessage } from '@/database/schema/messages'
 
 // Create an OpenAI API client (that's edge friendly!)
 export const openai = new OpenAI({
@@ -14,6 +14,8 @@ export const openai = new OpenAI({
 export { type ChatCompletionMessageParam }
 export type OpenAIModels = ChatCompletionCreateParamsBase['model']
 export type Models = 'gpt-4' | 'gpt-4-32k' | 'gpt-3.5-turbo' | 'gpt-3.5-16k'
+export type Message = ChatCompletionMessageParam
+export type FunctionCall = ChatCompletionMessageParam.FunctionCall
 
 // https://platform.openai.com/docs/models/gpt-4
 export const MAX_TOKEN_LIMITS: Record<Models, number> = {
@@ -34,7 +36,7 @@ export function calculateTokenLength(message: any): number {
 }
 
 // Function to process the messages
-export function processMessages(messages: ChatCompletionMessageParam[], token_limit: number = 4097) {
+export function processMessages(messages: Message[], token_limit: number = 4097) {
   // Create a copy of messages to hold the final result
   let result = messages.slice()
 
@@ -56,13 +58,15 @@ export function processMessages(messages: ChatCompletionMessageParam[], token_li
     }
   }
 
-  return result
+  return result.map((m) => ({
+    content: m.content,
+    role: m.role,
+    function_call: m.function_call as FunctionCall,
+  }))
+  // return result
 }
 
-export async function OpenAIChat(messages: ChatCompletionMessageParam[], model: Models = DEFAULT_MODEL) {
-  // Extract the `messages` from the body of the request
-  // Request the OpenAI API for the response based on the prompt
-
+export async function OpenAIChat(messages: Message[], callbacks: OpenAIStreamCallbacks, model: Models = DEFAULT_MODEL) {
   const truncatedMessages = processMessages(messages, MAX_TOKEN_LIMITS[model])
 
   const response = await openai.chat.completions.create({
@@ -99,38 +103,41 @@ export async function OpenAIChat(messages: ChatCompletionMessageParam[], model: 
   })
   // TODO: https://sdk.vercel.ai/docs/guides/providers/openai#guide-save-to-database-after-completion
   // Convert the response into a friendly text-stream
-  const openAIStream = OpenAIStream(response)
 
-  // Create TransformStream
-  const transformStream = new TransformStream()
-
-  // Create two output readable streams
-  const [clientStream, dbStream] = transformStream.readable.tee()
-
-  // Pipe to client
-  const streamResponse = new StreamingTextResponse(clientStream)
-
-  // Pipe to database
-  // TODO: optimize caching stream chunks to Redis before writing to Postgres in one transaction
-  const dbReader = dbStream.getReader()
-  const readStreamToDB = async () => {
-    const { value, done } = await dbReader.read()
-    if (done) return
-    await saveToDB(value)
-    readStreamToDB()
-  }
-
-  readStreamToDB()
-
-  // Pipe original stream to TransformStream
-  openAIStream.pipeTo(transformStream.writable)
-
-  return streamResponse
+  return OpenAIStream(response, callbacks)
 }
 
-const textDecoder = new TextDecoder('utf-8')
-async function saveToDB(chunk) {
-  // TODO: database save logic here
-  const text = textDecoder.decode(chunk)
-  console.log(text)
-}
+// export async function splitStream(openAIStream: ReadableStream, messageId: string) {
+//   // Create TransformStream
+//   const transformStream = new TransformStream()
+
+//   // Create two output readable streams
+//   const [clientStream, dbStream] = transformStream.readable.tee()
+
+//   // Pipe to client
+//   const streamResponse = new StreamingTextResponse(clientStream)
+
+//   // Pipe to database
+//   // TODO: optimize caching stream chunks to Redis before writing to Postgres in one transaction
+//   const dbReader = dbStream.getReader()
+//   const readStreamToDB = async () => {
+//     const { value, done } = await dbReader.read()
+//     if (done) return
+//     await saveToDB(value)
+//     readStreamToDB()
+//   }
+
+//   readStreamToDB()
+
+//   // Pipe original stream to TransformStream
+//   openAIStream.pipeTo(transformStream.writable)
+
+//   return streamResponse
+// }
+
+// const textDecoder = new TextDecoder('utf-8')
+// async function saveToDB(chunk) {
+//   // TODO: database save logic here
+//   const text = textDecoder.decode(chunk)
+//   console.log(text)
+// }

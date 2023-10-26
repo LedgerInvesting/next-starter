@@ -3,10 +3,12 @@ import { sessions } from '@/database/schema/auth'
 import { apiKeys } from '@/database/schema/api_keys'
 import { getSearchParams } from '@/lib/utils'
 import { eq } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 
-export const enforceAPIAuth = async (request: Request): Promise<string | null> => {
+export const enforceAPIAuth = async (request: NextRequest): Promise<string | null> => {
   let user = null
-  const sessionToken = request.headers.get('next-auth.session-token')
+  const sessionToken =
+    request.headers.get('next-auth.session-token') || request.cookies.get('next-auth.session-token')?.value
   const authorization = request.headers.get('authorization')
   const apiKey = authorization?.slice(7) || getSearchParams(request)['api_key']
 

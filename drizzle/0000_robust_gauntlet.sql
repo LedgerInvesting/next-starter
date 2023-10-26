@@ -1,3 +1,9 @@
+DO $$ BEGIN
+ CREATE TYPE "message_roles" AS ENUM('user', 'assistant', 'system', 'function');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "api_keys" (
 	"secret" text PRIMARY KEY NOT NULL,
 	"user" text NOT NULL,
@@ -44,8 +50,19 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 CREATE TABLE IF NOT EXISTS "chats" (
 	"id" text PRIMARY KEY NOT NULL,
 	"title" text,
-	"content" json,
 	"user" text,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "messages" (
+	"id" text PRIMARY KEY NOT NULL,
+	"role" "message_roles",
+	"content" text,
+	"function_call" json,
+	"token_count" integer,
+	"user" text,
+	"chat" text,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now()
 );
@@ -72,6 +89,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "chats" ADD CONSTRAINT "chats_user_user_id_fk" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "messages" ADD CONSTRAINT "messages_user_user_id_fk" FOREIGN KEY ("user") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "messages" ADD CONSTRAINT "messages_chat_chats_id_fk" FOREIGN KEY ("chat") REFERENCES "chats"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
