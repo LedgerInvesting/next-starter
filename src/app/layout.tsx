@@ -4,6 +4,7 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/toaster'
 import { siteConfig } from '@/config/site'
 import { getCurrentUser } from '@/lib/session'
+import { getSelfURL } from '@/lib/utils'
 import '@/styles/globals.css'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
   },
-  manifest: `${siteConfig.url}/site.webmanifest`,
+  manifest: getSelfURL(`/site.webmanifest`),
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

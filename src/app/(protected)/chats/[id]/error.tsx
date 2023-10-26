@@ -12,7 +12,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <div>
       <h2>Something went wrong!</h2>
-      <Link href="/chat">Back</Link>
+      <Link href="/chats">Back</Link>
     </div>
   )
 }

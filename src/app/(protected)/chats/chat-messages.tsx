@@ -1,14 +1,16 @@
 'use client'
 
-import { ChatMessages } from '@/app/(protected)/chat/[id]/page'
+import { ChatWithMessages } from '@/app/(protected)/chats/[id]/page'
 import { Button } from '@/components/ui/button'
-import { type Message, useChat } from 'ai/react'
+import { useChat } from 'ai/react'
 import { ChevronRight } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 
 export const PROMPT_INSTRUCTIONS = ``
 
-export default function Chat({ chat }: { chat?: ChatMessages }) {
+export default function Chat({ chat }: { chat?: ChatWithMessages }) {
+  const router = useRouter()
   const initialMessages = chat?.messages
     ? chat.messages.map((m) => ({
         id: m.id,
@@ -18,61 +20,81 @@ export default function Chat({ chat }: { chat?: ChatMessages }) {
       }))
     : []
   const [rows, setRows] = useState(1)
-  const { messages, input, error, handleInputChange, handleSubmit, stop, reload, setMessages, isLoading, append } =
-    useChat({
-      api: '/api/chat',
-      initialMessages: [
-        ...initialMessages,
-        // {
-        //   id: '1',
-        //   role: 'system',
-        //   content: PROMPT_INSTRUCTIONS,
-        // },
-      ],
-      onError: (err) => {
-        console.error('onError', err)
-      },
-      onResponse: (res) => {
-        console.log('onResponse > await res.json()', res)
-      },
-      onFinish: (msg) => {
-        console.log('onFinish > msg', msg)
-      },
-      experimental_onFunctionCall: async (msgList) => {
-        console.log('experimental_onFunctionCall > msgList', msgList)
-        const msg = msgList[msgList.length - 1]
-        const function_call = msg.function_call
-        if (!function_call) return
-        if (typeof function_call === 'string') return
-        const { name, arguments: args } = function_call
-        if (name === 'functionName' && !!args) {
-          const body = JSON.stringify(JSON.parse(args))
-          console.log('body', body)
+  const {
+    messages,
+    data,
+    input,
+    error,
+    handleInputChange,
+    handleSubmit,
+    stop,
+    reload,
+    setMessages,
+    isLoading,
+    append,
+  } = useChat({
+    api: chat?.id ? `/api/chats/${chat?.id}` : '/api/chats',
+    initialMessages: [
+      ...initialMessages,
+      // {
+      //   id: '1',
+      //   role: 'system',
+      //   content: PROMPT_INSTRUCTIONS,
+      // },
+    ],
+    onError: (err) => {
+      console.error('onError', err)
+    },
+    onResponse: (res) => {
+      console.log('onResponse > res', res.body)
+    },
+    onFinish: (msg) => {
+      console.log('onFinish > msg', msg)
+    },
+    experimental_onFunctionCall: async (msgList) => {
+      console.log('experimental_onFunctionCall > msgList', msgList)
+      const msg = msgList[msgList.length - 1]
+      const function_call = msg.function_call
+      if (!function_call) return
+      if (typeof function_call === 'string') return
+      const { name, arguments: args } = function_call
+      if (name === 'functionName' && !!args) {
+        const body = JSON.stringify(JSON.parse(args))
+        console.log('body', body)
 
-          // let newMessages = []
-          // const r = await fetch('/api/functions/<functionName>', {
-          //   body: body,
-          //   method: 'POST',
-          //   headers: { 'Content-Type': 'application/json' },
-          // })
+        // let newMessages = []
+        // const r = await fetch('/api/functions/<functionName>', {
+        //   body: body,
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        // })
 
-          // const prompt = processFunctionResponse(r)
-          // newMessages.push({
-          //   id: Math.random().toString(),
-          //   role: 'assistant',
-          //   content: `${prompt}`,
-          // } satisfies Message)
-          // return { messages: [...msgList, ...newMessage] }
-        }
-        return
-      },
-    })
+        // const prompt = processFunctionResponse(r)
+        // newMessages.push({
+        //   id: Math.random().toString(),
+        //   role: 'assistant',
+        //   content: `${prompt}`,
+        // } satisfies Message)
+        // return { messages: [...msgList, ...newMessage] }
+      }
+      return
+    },
+  })
 
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const rowHeight = 24 // px
   const maxRows = 4
   const maxHeight = rowHeight * maxRows // 96px
+
+  useEffect(() => {
+    console.log('data', data)
+    const newChatId = data?.find((d) => !!d.new_chat_id)?.new_chat_id
+    if (!!newChatId && !!router) {
+      // router.push(`/chats/${chatId}`)
+      router.replace(`/chats/${newChatId}`)
+    }
+  }, [data, router])
 
   return (
     <div className="flex h-full flex-col">

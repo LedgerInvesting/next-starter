@@ -17,6 +17,8 @@ export const messages = pgTable(
   'messages',
   {
     id: id('message'),
+    // TODO: add reference to previous message in a thread
+    // previous: text('previous').references(() => messages.id, { onDelete: 'cascade' }),
     role: messageRolesEnum('role'),
     content: text('content'),
     function_call: json('function_call').$type<ChatCompletionMessageParam.FunctionCall>(),

@@ -1,10 +1,11 @@
-import Chat from '@/app/(protected)/chat/chat'
+import Chat from '@/app/(protected)/chats/chat-messages'
+import { useChats } from '@/app/(protected)/chats/chat-provider'
 import db from '@/database'
 import { chats } from '@/database/schema/chats'
 import { eq } from 'drizzle-orm'
 import { notFound, redirect } from 'next/navigation'
 
-export const getChatMessages = async (chatId: string) => {
+export const getChatWithMessages = async (chatId: string) => {
   // via db query
   return await db.query.chats.findFirst({
     where: eq(chats.id, chatId),
@@ -17,16 +18,23 @@ export const getChatMessages = async (chatId: string) => {
   // return await r.json()
 }
 
-export type ChatMessages = Awaited<ReturnType<typeof getChatMessages>>
+export type ChatWithMessages = Awaited<ReturnType<typeof getChatWithMessages>>
 
 export default async function Page({ params }: { params: { id: string } }) {
-  let chat: ChatMessages | undefined | null
+  let chat: ChatWithMessages | undefined | null
+  // const { setCurrent } = useChats()
   if (params?.id) {
-    chat = await getChatMessages(params?.id)
+    chat = await getChatWithMessages(params?.id)
     if (!chat) {
-      // redirect('/chat')
-      notFound()
+      redirect('/chats')
+      // notFound()
     }
+    // setCurrent(chat)
   }
-  return <Chat chat={chat} />
+  return (
+    <>
+      {chat.id}
+      <Chat chat={chat} />
+    </>
+  )
 }

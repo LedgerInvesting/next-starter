@@ -16,7 +16,7 @@ export const items: MenuItemType[] = [
   },
   {
     title: 'Chat',
-    href: '/chat',
+    href: '/chats',
   },
   // ...
 ]
