@@ -3,6 +3,7 @@ import { chats } from '@/database/schema/chats'
 import { getCurrentUser } from '@/lib/session'
 import { eq } from 'drizzle-orm'
 import { User } from 'next-auth'
+import Link from 'next/link'
 
 export const getChats = async (userId: string, page: number = 0) => {
   const pageSize = 20
@@ -19,10 +20,14 @@ export type Chats = Awaited<ReturnType<typeof getChats>>
 export default async function ChatSidebar({ user }: { user: User }) {
   const chats = await getChats(user?.id)
   return (
-    <>
+    <div className="flex flex-grow flex-col">
       {chats.map((chat) => {
-        return <div key={chat.id}>{chat.title}</div>
+        return (
+          <Link key={chat.id} href={'/chat/' + chat.id}>
+            {chat.id}
+          </Link>
+        )
       })}
-    </>
+    </div>
   )
 }

@@ -16,7 +16,7 @@ export const messageRolesEnum = pgEnum('message_roles', messageRoles)
 export const messages = pgTable(
   'messages',
   {
-    id: id('chat'),
+    id: id('message'),
     role: messageRolesEnum('role'),
     content: text('content'),
     function_call: json('function_call').$type<ChatCompletionMessageParam.FunctionCall>(),

@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 type Params = { params: { id: string } }
 
 // export const runtime = 'edge'
 
 // Update a chat by ID
-export async function POST(req: Request, { params }: Params) {
+export async function POST(req: NextRequest, { params }: Params) {
   // const body = await req.json()
   // const chatId = params.id
 
@@ -13,11 +13,11 @@ export async function POST(req: Request, { params }: Params) {
 }
 
 // Retrieve a chat by ID
-export async function GET(req: Request, { params }: Params) {
+export async function GET(req: NextRequest, { params }: Params) {
   return NextResponse.json([])
 }
 
 // Delete a chat by ID
-export async function DELETE(req: Request, { params }: Params) {
+export async function DELETE(req: NextRequest, { params }: Params) {
   return NextResponse.json([])
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { ChatMessages } from '@/app/(protected)/chat/content'
+import { ChatMessages } from '@/app/(protected)/chat/[id]/page'
 import { Button } from '@/components/ui/button'
 import { type Message, useChat } from 'ai/react'
 import { ChevronRight } from 'lucide-react'

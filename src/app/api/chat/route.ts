@@ -5,6 +5,7 @@ import { InsertMessage, messages } from '@/database/schema/messages'
 import { enforceAPIAuth } from '@/lib/enforce-api-auth'
 import { ChatCompletionMessageParam, OpenAIChat } from '@/lib/openai'
 import { OpenAIStreamCallbacks, StreamingTextResponse } from 'ai'
+import { eq } from 'drizzle-orm'
 import { NextRequest, NextResponse } from 'next/server'
 
 // https://vercel.com/docs/concepts/functions/edge-functions/limitations#code-size-limit
@@ -56,6 +57,8 @@ export async function POST(req: NextRequest) {
 }
 
 // Retrieve multiple chats
-export async function GET(req: Request) {
-  return NextResponse.json([])
+export async function GET(req: NextRequest) {
+  const userId = await enforceAPIAuth(req)
+  const userChats = await db.query.chats.findMany({ where: eq(chats.user, userId) })
+  return NextResponse.json(userChats)
 }
