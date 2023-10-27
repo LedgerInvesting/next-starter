@@ -11,7 +11,6 @@ export async function createOrContinueChat(
   chatId?: string,
 ) {
   const FLOW = chatId ? 'continue' : 'create'
-  console.log(`[${FLOW}]`, { userId, messageBody, chatId })
   let openAIMessages = messageBody
   if (FLOW === 'continue') {
     // TODO: optimize to select only last message from chat within the token limit
@@ -98,7 +97,6 @@ export async function createOrContinueChat(
           user: userId,
           chat: newChat.id,
         })
-        console.log('messagesData', messagesData)
         db.insert(messages).values(messagesData).execute()
         data.append({
           new_chat_id: newChat.id,
@@ -110,7 +108,6 @@ export async function createOrContinueChat(
           user: userId,
           chat: chatId,
         } satisfies InsertMessage
-        console.log('messagesData', messagesData)
         db.insert(messages).values(messagesData).execute()
       }
 

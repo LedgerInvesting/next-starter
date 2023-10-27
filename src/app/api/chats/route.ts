@@ -1,11 +1,9 @@
 // https://vercel.com/docs/concepts/functions/serverless-functions#bundling-serverless-functions
 import { createOrContinueChat } from '@/app/api/chats/create-or-continue'
 import db from '@/database'
-import { InsertChat, chats } from '@/database/schema/chats'
-import { InsertMessage, messages } from '@/database/schema/messages'
+import { chats } from '@/database/schema/chats'
 import { enforceAPIAuth } from '@/lib/enforce-api-auth'
-import { ChatCompletionMessageParam, OpenAIChat } from '@/lib/openai'
-import { OpenAIStreamCallbacks, StreamingTextResponse, experimental_StreamData } from 'ai'
+import { ChatCompletionMessageParam } from '@/lib/openai'
 import { eq } from 'drizzle-orm'
 import { NextRequest, NextResponse } from 'next/server'
 
