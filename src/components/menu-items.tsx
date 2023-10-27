@@ -14,5 +14,9 @@ export const items: MenuItemType[] = [
     title: 'Section',
     href: '/#section-id',
   },
+  {
+    title: 'Chat',
+    href: '/chats',
+  },
   // ...
 ]

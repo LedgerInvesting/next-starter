@@ -6,6 +6,7 @@
 .vercel
 
 postgres/db/
+postgres/pg_jsonschema/
 postgres/*.log
 
 # dependencies

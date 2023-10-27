@@ -1,7 +1,10 @@
-import { Footer } from '@/components/footer'
-import { Header } from '@/components/header'
+import { Analytics } from '@/components/analytics'
+import { ThemeProvider } from '@/components/providers/theme'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
+import { Toaster } from '@/components/ui/toaster'
 import { siteConfig } from '@/config/site'
-import { getCurrentSession, getCurrentUser } from '@/lib/session'
+import { getCurrentUser } from '@/lib/session'
+import { getSelfURL } from '@/lib/utils'
 import '@/styles/globals.css'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
@@ -52,24 +55,20 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
   },
-  manifest: `${siteConfig.url}/site.webmanifest`,
+  manifest: getSelfURL(`/site.webmanifest`),
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser()
   return (
-    <html
-      lang="en"
-      className={clsx('scroll-smooth bg-white antialiased', inter.variable)}
-    >
+    <html lang="en" className={clsx('scroll-smooth bg-white antialiased', inter.variable)}>
       <body className="flex min-h-screen w-full flex-col justify-between">
-        <Header user={user} />
-        <main className="flex-grow bg-slate-100">{children}</main>
-        <Footer />
+        <ThemeProvider attribute="class" defaultTheme="ligth" enableSystem>
+          {children}
+          <Analytics />
+          <Toaster />
+          <TailwindIndicator />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -48,6 +48,5 @@
     "postgres",
     "drizzle"
   ],
-  "strict": true,
   "forceConsistentCasingInFileNames": true
 }

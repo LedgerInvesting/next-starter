@@ -1,15 +1,18 @@
 import { timestamp, pgTable, text, primaryKey, integer, pgSchema, index } from 'drizzle-orm/pg-core'
 import type { AdapterAccount } from '@auth/core/adapters'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import { z } from 'zod'
 import { relations } from 'drizzle-orm'
+import { apiKeys } from '@/database/schema/api_keys'
+import { chats } from '@/database/schema/chats'
 
 // Useful links
 // https://github.com/drizzle-team/drizzle-orm/tree/main/drizzle-zod
 
-export const authSchema = pgSchema('auth')
+// export const authSchema = pgSchema('auth')
+// export const createTable = authSchema.table
+export const createTable = pgTable
 
-export const users = authSchema.table('user', {
+export const users = createTable('user', {
   id: text('id').notNull().primaryKey(),
   name: text('name'),
   email: text('email').notNull(),
@@ -20,9 +23,11 @@ export const insertUserSchema = createInsertSchema(users)
 export const selectUserSchema = createSelectSchema(users)
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  apiKeys: many(apiKeys),
+  chats: many(chats),
 }))
 
-export const accounts = authSchema.table(
+export const accounts = createTable(
   'account',
   {
     userId: text('userId')
@@ -50,7 +55,7 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }))
 
-export const sessions = authSchema.table(
+export const sessions = createTable(
   'session',
   {
     sessionToken: text('sessionToken').notNull().primaryKey(),
@@ -69,7 +74,7 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }))
 
-export const verificationTokens = authSchema.table(
+export const verificationTokens = createTable(
   'verificationToken',
   {
     identifier: text('identifier').notNull(),

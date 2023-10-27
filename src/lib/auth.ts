@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google'
 // import GitHubProvider from 'next-auth/providers/github'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import db from '@/database'
-import { authSchema } from '@/database/schema/auth'
+import { createTable } from '@/database/schema/auth'
 import { pgTableCreator } from 'drizzle-orm/pg-core'
 
 /**
@@ -29,13 +29,13 @@ declare module 'next-auth' {
 
 export const authOptions = {
   // @ts-ignore
-  adapter: DrizzleAdapter(db, authSchema.table), // TODO: try implement custom adapter https://github.com/miljan-code/drizzle-next-auth/blob/main/lib/auth/drizzle-adapter.ts
+  adapter: DrizzleAdapter(db, createTable), // TODO: try implement custom adapter https://github.com/miljan-code/drizzle-next-auth/blob/main/lib/auth/drizzle-adapter.ts
   // session: {
   //   strategy: 'jwt',
   // },
-  // pages: {
-  //   signIn: '/signin',
-  // },
+  pages: {
+    signIn: '/signin',
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
