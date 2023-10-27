@@ -12,7 +12,8 @@ export const enforceAPIAuth = async (request: NextRequest): Promise<string | nul
     request.cookies.get('next-auth.session-token')?.value ||
     request.cookies.get('__Secure-next-auth.session-token')?.value
   const authorization = request.headers.get('authorization')
-  const apiKey = authorization?.slice(7) || getSearchParams(request)['api_key']
+  const apiKey =
+    authorization?.slice(7) || request.nextUrl.searchParams['api_key'] || getSearchParams(request)['api_key']
 
   if (sessionToken) {
     const session = await db.query.sessions.findFirst({ where: eq(sessions.sessionToken, sessionToken) })
