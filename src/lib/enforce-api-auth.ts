@@ -8,7 +8,9 @@ import { NextRequest } from 'next/server'
 export const enforceAPIAuth = async (request: NextRequest): Promise<string | null> => {
   let user = null
   const sessionToken =
-    request.headers.get('next-auth.session-token') || request.cookies.get('next-auth.session-token')?.value
+    request.headers.get('next-auth.session-token') ||
+    request.cookies.get('next-auth.session-token')?.value ||
+    request.cookies.get('__Secure-next-auth.session-token')?.value
   const authorization = request.headers.get('authorization')
   const apiKey = authorization?.slice(7) || getSearchParams(request)['api_key']
 
