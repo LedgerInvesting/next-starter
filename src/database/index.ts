@@ -6,9 +6,9 @@ import * as schema from './load-schema'
 const client = new Pool({
   connectionString: DB_URL,
 })
-if (process.env.NODE_ENV === 'production' && process.env.npm_lifecycle_event !== 'build') {
-  await client.connect()
-}
+// if (process.env.NODE_ENV === 'production' && process.env.npm_lifecycle_event !== 'build') {
+//   await client.connect()
+// }
 
 const db = drizzle(client, { logger: false, schema })
 
