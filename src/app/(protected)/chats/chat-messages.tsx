@@ -4,12 +4,13 @@ import { ChatWithMessages } from '@/app/(protected)/chats/[id]/page'
 import { Button } from '@/components/ui/button'
 import { useChat } from 'ai/react'
 import { ChevronRight } from 'lucide-react'
+import { type User } from 'next-auth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
 export const PROMPT_INSTRUCTIONS = ``
 
-export default function Chat({ chat }: { chat?: ChatWithMessages }) {
+export default function Chat({ chat, user }: { chat?: ChatWithMessages; user?: User }) {
   const router = useRouter()
   const initialMessages = chat?.messages
     ? chat.messages.map((m) => ({

@@ -1,3 +1,4 @@
+import { UserProvider } from '@/app/user-provider'
 import { Analytics } from '@/components/analytics'
 import { ThemeProvider } from '@/components/providers/theme'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -9,6 +10,7 @@ import '@/styles/globals.css'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { userAgent } from 'next/server'
 
 export const inter = Inter({
   subsets: ['latin'],
@@ -64,7 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={clsx('scroll-smooth bg-white antialiased', inter.variable)}>
       <body className="flex min-h-screen w-full flex-col justify-between">
         <ThemeProvider attribute="class" defaultTheme="ligth" enableSystem>
-          {children}
+          <UserProvider user={user}>{children}</UserProvider>
           <Analytics />
           <Toaster />
           <TailwindIndicator />

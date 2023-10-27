@@ -16,6 +16,7 @@ export async function enforceAuth() {
     console.error(error)
   }
   const user = await getCurrentUser()
+  console.log('enforceAuth -> user', user)
   if (!user) {
     redirect(authOptions?.pages?.signIn + from || '/signin' + from)
   }

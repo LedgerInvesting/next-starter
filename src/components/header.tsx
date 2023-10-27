@@ -21,7 +21,7 @@ import { redirect } from 'next/navigation'
 import clsx from 'clsx'
 import { useState } from 'react'
 
-export function Header({ user }: { user: User }) {
+export function Header({ user }: { user?: User }) {
   const [open, setOpen] = useState(false)
   return (
     <header className="z-50 flex h-16 items-center border-b border-gray-200 bg-white">

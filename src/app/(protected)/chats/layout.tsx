@@ -9,6 +9,8 @@ import { ChatProvider } from '@/app/(protected)/chats/chat-provider'
 import db from '@/database'
 import { desc, eq } from 'drizzle-orm'
 import { chats } from '@/database/schema/chats'
+import { getCurrentUser } from '@/lib/session'
+import { User } from 'next-auth'
 
 export const getChats = async (userId: string, page: number = 0) => {
   const pageSize = 20
