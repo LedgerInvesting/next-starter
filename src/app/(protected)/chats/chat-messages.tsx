@@ -1,6 +1,7 @@
 'use client'
 
 import { ChatWithMessages } from '@/app/(protected)/chats/[id]/page'
+import { useChats } from '@/app/(protected)/chats/chat-provider'
 import { Button } from '@/components/ui/button'
 import { useChat } from 'ai/react'
 import { ChevronRight } from 'lucide-react'
@@ -11,6 +12,7 @@ import { useEffect, useRef, useState } from 'react'
 export const PROMPT_INSTRUCTIONS = ``
 
 export default function Chat({ chat, user }: { chat?: ChatWithMessages; user?: User }) {
+  const { setChats } = useChats()
   const router = useRouter()
   const initialMessages = chat?.messages
     ? chat.messages.map((m) => ({
@@ -90,12 +92,13 @@ export default function Chat({ chat, user }: { chat?: ChatWithMessages; user?: U
 
   useEffect(() => {
     console.log('data', data)
-    const newChatId = data?.find((d) => !!d.new_chat_id)?.new_chat_id
-    if (!!newChatId && !!router) {
+    const newChat = data?.find((d) => !!d.new_chat?.id)?.new_chat
+    if (!!newChat && !!router && !!setChats) {
       // router.push(`/chats/${chatId}`)
-      router.replace(`/chats/${newChatId}`)
+      setChats((chats) => [newChat, ...chats])
+      router.replace(`/chats/${newChat.id}`)
     }
-  }, [data, router])
+  }, [data, router, setChats])
 
   return (
     <div className="flex h-full flex-col">

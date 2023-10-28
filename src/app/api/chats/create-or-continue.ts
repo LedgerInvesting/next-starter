@@ -99,7 +99,7 @@ export async function createOrContinueChat(
         })
         db.insert(messages).values(messagesData).execute()
         data.append({
-          new_chat_id: newChat.id,
+          new_chat: JSON.parse(JSON.stringify(newChat)),
         })
       } else if (FLOW === 'continue') {
         const messagesData = {

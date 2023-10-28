@@ -54,7 +54,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <Button>New chat</Button>
           </Link>
           <ScrollArea className="flex flex-grow bg-stripes-indigo-400">
-            <ChatSidebar />
+            <ChatSidebar chats={chats} />
           </ScrollArea>
         </div>
         <div className="w-full bg-stripes-cyan-500">{children}</div>

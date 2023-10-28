@@ -12,9 +12,8 @@ export const ChatContext = createContext<{
 })
 
 export function ChatProvider({ children, ...props }) {
+  console.log('ChatProvider -> props', props)
   const [chats, setChats] = useState<Chats>(props.chats)
-
-  useEffect(() => {}, [])
 
   return (
     <ChatContext.Provider value={{ chats, setChats }} {...props}>
